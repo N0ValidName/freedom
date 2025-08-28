@@ -1,0 +1,1 @@
+# ArkUI module for OpenHarmony ArkTS fuzzing support
