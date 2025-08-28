@@ -34,18 +34,22 @@ def init():
 
 class FuzzMode(Enum):
     GenerateOnly = 0  # Test
+    ArkTSGenerate = 1  # ArkTS Generation
+    HybridGenerate = 2  # Both DOM and ArkTS
 
 
 fuzz_modes = {
     "generate": FuzzMode.GenerateOnly,
+    "arkts-generate": FuzzMode.ArkTSGenerate,
+    "hybrid": FuzzMode.HybridGenerate,
 }
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='A DOM fuzzer')
-    parser.add_argument("-m", dest="mode", help="Fuzzing mode")
+    parser = argparse.ArgumentParser(description='A DOM and ArkTS fuzzer for OpenHarmony applications')
+    parser.add_argument("-m", dest="mode", help="Fuzzing mode: generate (DOM only), arkts-generate (ArkTS only), or hybrid (both)")
     parser.add_argument("-n", dest="num", help="Number of generated testcases", required=False)
     parser.add_argument("-i", dest="index", help="Fuzzer ID")
-    parser.add_argument("-o", dest="output", required=False)
+    parser.add_argument("-o", dest="output", required=False, help="Output directory for generated files")
     args = parser.parse_args()
 
     mode = fuzz_modes.get(args.mode)
@@ -63,5 +67,21 @@ if __name__ == "__main__":
         manager = Manager(int(args.index), True, args.output)
         fuzzer = Fuzzer(None, manager)
         fuzzer.generate_only(int(args.num))
+    elif mode == FuzzMode.ArkTSGenerate:
+        if args.output is None or args.num is None:
+            print("Number of testcases (-n) and output directory (-o) are required in ArkTS generation mode.")
+            sys.exit(1)
+
+        manager = Manager(int(args.index), True, args.output, file_extension=".ets")
+        fuzzer = Fuzzer(None, manager)
+        fuzzer.generate_arkts_only(int(args.num))
+    elif mode == FuzzMode.HybridGenerate:
+        if args.output is None or args.num is None:
+            print("Number of testcases (-n) and output directory (-o) are required in hybrid generation mode.")
+            sys.exit(1)
+
+        manager = Manager(int(args.index), True, args.output)
+        fuzzer = Fuzzer(None, manager)
+        fuzzer.generate_hybrid(int(args.num))
     else:
         pass

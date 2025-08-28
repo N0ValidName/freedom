@@ -43,6 +43,16 @@ token_limit = {
 }
 
 
+class ArkTSConfig:
+    max_component_count = 50
+    min_component_count = 20
+    max_component_depth = 5
+    max_property_count = 8
+    max_event_handler_count = 3
+    max_state_variable_count = 10
+    max_api_call_count = 15
+
+
 class GlobalConfig:
     merge = False
     generation = False
