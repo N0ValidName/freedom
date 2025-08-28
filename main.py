@@ -64,7 +64,8 @@ if __name__ == "__main__":
             print("Number of testcases (-n) and output directory (-o) are required in generated-only mode.")
             sys.exit(1)
 
-        manager = Manager(int(args.index), True, args.output)
+        index = int(args.index) if args.index else 1
+        manager = Manager(index, True, args.output)
         fuzzer = Fuzzer(None, manager)
         fuzzer.generate_only(int(args.num))
     elif mode == FuzzMode.ArkTSGenerate:
@@ -72,7 +73,8 @@ if __name__ == "__main__":
             print("Number of testcases (-n) and output directory (-o) are required in ArkTS generation mode.")
             sys.exit(1)
 
-        manager = Manager(int(args.index), True, args.output, file_extension=".ets")
+        index = int(args.index) if args.index else 1
+        manager = Manager(index, True, args.output, file_extension=".ets")
         fuzzer = Fuzzer(None, manager)
         fuzzer.generate_arkts_only(int(args.num))
     elif mode == FuzzMode.HybridGenerate:
@@ -80,7 +82,8 @@ if __name__ == "__main__":
             print("Number of testcases (-n) and output directory (-o) are required in hybrid generation mode.")
             sys.exit(1)
 
-        manager = Manager(int(args.index), True, args.output)
+        index = int(args.index) if args.index else 1
+        manager = Manager(index, True, args.output)
         fuzzer = Fuzzer(None, manager)
         fuzzer.generate_hybrid(int(args.num))
     else:
